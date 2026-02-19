@@ -16,4 +16,7 @@
     <string name="permission_denied_storage">Storage permission is required to save wallpapers</string>
     <string name="splash_tagline">Stunning wallpapers, one tap away</string>
     <string name="splash_loading">Preparing your experience…</string>
+    <string name="search_categories_hint">Search categories or keywords…</string>
+    <string name="search_wallpapers_hint">Search wallpapers…</string>
+    <string name="search_for">Search for \"%s\"</string>
 </resources>

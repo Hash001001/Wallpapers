@@ -100,6 +100,32 @@ class PixabayWallpaperRepository @Inject constructor(
         }
     }
 
+    override fun searchWallpapers(query: String): Flow<List<Wallpaper>> = flow {
+        if (apiKey.isBlank() || query.isBlank()) {
+            emit(emptyList())
+            return@flow
+        }
+
+        try {
+            val response = apiService.searchImages(
+                apiKey = apiKey,
+                query = query,
+                perPage = 20
+            )
+
+            val wallpapers = response.hits.map { image ->
+                Wallpaper(
+                    id = image.id.toString(),
+                    imageUrl = image.largeImageUrl,
+                    categoryId = ""
+                )
+            }
+            emit(wallpapers)
+        } catch (e: Exception) {
+            throw Exception("Failed to search wallpapers: ${e.message}", e)
+        }
+    }
+
     private data class CategoryDefinition(
         val id: String,
         val name: String,

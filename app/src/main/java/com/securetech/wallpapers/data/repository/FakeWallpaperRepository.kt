@@ -77,4 +77,9 @@ class FakeWallpaperRepository @Inject constructor() : WallpaperRepository {
         delay(300)
         emit(wallpapers.filter { it.categoryId == categoryId })
     }
+
+    override fun searchWallpapers(query: String): Flow<List<Wallpaper>> = flow {
+        delay(300)
+        emit(wallpapers.filter { it.categoryId.isNotEmpty() })
+    }
 }
