@@ -45,7 +45,7 @@ class PixabayWallpaperRepository @Inject constructor(
                             val response = apiService.searchImages(
                                 apiKey = apiKey,
                                 query = def.searchQuery,
-                                perPage = 3
+                                perPage = CATEGORY_THUMBNAIL_FETCH_COUNT
                             )
                             val thumbnailUrl = response.hits.firstOrNull()?.webformatUrl ?: ""
                             Category(
@@ -105,4 +105,8 @@ class PixabayWallpaperRepository @Inject constructor(
         val name: String,
         val searchQuery: String
     )
+
+    companion object {
+        private const val CATEGORY_THUMBNAIL_FETCH_COUNT = 3
+    }
 }
