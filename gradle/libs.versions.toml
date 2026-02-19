@@ -14,6 +14,7 @@ constraintlayout = "2.1.4"
 # Architecture Components
 lifecycle = "2.7.0"
 navigation = "2.7.6"
+viewpager2 = "1.0.0"
 
 # Dependency Injection
 hilt = "2.50"
@@ -25,6 +26,9 @@ gson = "2.10.1"
 
 # Coroutines
 coroutines = "1.7.3"
+
+# Image Loading
+coil = "2.5.0"
 
 [libraries]
 # Core Android
@@ -42,6 +46,9 @@ androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecyc
 # Navigation Component
 androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation" }
 androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation" }
+
+# ViewPager2
+androidx-viewpager2 = { group = "androidx.viewpager2", name = "viewpager2", version.ref = "viewpager2" }
 
 # Hilt
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
@@ -61,6 +68,9 @@ gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 # Coroutines
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
+
+# Image Loading
+coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 
 # Testing
 junit = { group = "junit", name = "junit", version.ref = "junit" }

@@ -7,23 +7,42 @@
     android:background="@android:color/black"
     tools:context=".ui.preview.PreviewFragment">
 
-    <ImageView
-        android:id="@+id/imageViewPreview"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPagerPreview"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:contentDescription="@string/wallpaper_preview"
-        android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@android:color/darker_gray" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabSetWallpaper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/set_wallpaper"
+        android:src="@android:drawable/ic_menu_gallery"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/fabDownload" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabDownload"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         android:contentDescription="@string/download_wallpaper"
         android:src="@android:drawable/stat_sys_download"
         app:layout_constraintBottom_toBottomOf="parent"
