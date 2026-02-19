@@ -1,18 +1,18 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.ksp)
-    alias(libs.plugins.hilt.android)
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("com.google.devtools.ksp")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
     namespace = "com.securetech.wallpapers"
-    compileSdk = 36
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.securetech.wallpapers"
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
