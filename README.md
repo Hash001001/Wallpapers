@@ -73,6 +73,17 @@ app/
 - JDK 11 or higher
 - Android SDK 34
 
+### API Key Setup
+
+This app uses the [Pixabay API](https://pixabay.com/api/docs/) to fetch wallpaper images. To get wallpapers working:
+
+1. Sign up for a free API key at [pixabay.com/api/docs/](https://pixabay.com/api/docs/)
+2. Add your API key to `gradle.properties` (project root):
+   ```properties
+   PIXABAY_API_KEY=your_api_key_here
+   ```
+3. Rebuild the project
+
 ### Building the Project
 
 1. Clone the repository

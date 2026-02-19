@@ -18,6 +18,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Pixabay API key - get your free key at https://pixabay.com/api/docs/
+        buildConfigField("String", "PIXABAY_API_KEY", "\"${project.findProperty("PIXABAY_API_KEY") ?: ""}\"")
     }
 
     buildTypes {
@@ -32,6 +35,7 @@ android {
     
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
     
     compileOptions {

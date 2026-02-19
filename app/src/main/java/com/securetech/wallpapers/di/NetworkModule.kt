@@ -2,6 +2,7 @@ package com.securetech.wallpapers.di
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.securetech.wallpapers.data.remote.PixabayApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -53,9 +54,15 @@ object NetworkModule {
         gson: Gson
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://api.example.com/") // Replace with actual API base URL
+            .baseUrl("https://pixabay.com/")
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun providePixabayApiService(retrofit: Retrofit): PixabayApiService {
+        return retrofit.create(PixabayApiService::class.java)
     }
 }

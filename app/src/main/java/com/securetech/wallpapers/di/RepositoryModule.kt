@@ -1,6 +1,6 @@
 package com.securetech.wallpapers.di
 
-import com.securetech.wallpapers.data.repository.FakeWallpaperRepository
+import com.securetech.wallpapers.data.repository.PixabayWallpaperRepository
 import com.securetech.wallpapers.domain.repository.WallpaperRepository
 import dagger.Binds
 import dagger.Module
@@ -15,6 +15,6 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindWallpaperRepository(
-        fakeWallpaperRepository: FakeWallpaperRepository
+        pixabayWallpaperRepository: PixabayWallpaperRepository
     ): WallpaperRepository
 }
