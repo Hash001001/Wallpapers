@@ -1,9 +1,14 @@
 package com.securetech.wallpapers.ui.preview
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -28,6 +33,24 @@ class PreviewFragment : Fragment() {
     private val viewModel: PreviewViewModel by viewModels()
     private val pagerAdapter = PreviewPagerAdapter()
 
+    private var pendingAction: (() -> Unit)? = null
+
+    private val storagePermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        val allGranted = permissions.values.all { it }
+        if (allGranted) {
+            pendingAction?.invoke()
+        } else {
+            Snackbar.make(binding.root, R.string.permission_denied_storage, Snackbar.LENGTH_LONG).show()
+        }
+        pendingAction = null
+    }
+
+    private val notificationPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { /* notification permission is optional, proceed regardless */ }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -43,6 +66,7 @@ class PreviewFragment : Fragment() {
         setupButtons()
         observeUiState()
         observeActionState()
+        requestNotificationPermissionIfNeeded()
     }
 
     private fun setupViewPager() {
@@ -52,7 +76,9 @@ class PreviewFragment : Fragment() {
     private fun setupButtons() {
         binding.fabDownload.setOnClickListener {
             val currentUrl = getCurrentWallpaperUrl() ?: return@setOnClickListener
-            viewModel.downloadWallpaper(currentUrl)
+            withStoragePermission {
+                viewModel.downloadWallpaper(currentUrl)
+            }
         }
 
         binding.fabSetWallpaper.setOnClickListener {
@@ -84,6 +110,41 @@ class PreviewFragment : Fragment() {
                 viewModel.setWallpaper(imageUrl, target)
             }
             .show()
+    }
+
+    private fun withStoragePermission(action: () -> Unit) {
+        val permissions = getRequiredStoragePermissions()
+        if (permissions.isEmpty() || permissions.all { hasPermission(it) }) {
+            action()
+        } else {
+            pendingAction = action
+            storagePermissionLauncher.launch(permissions.toTypedArray())
+        }
+    }
+
+    private fun getRequiredStoragePermissions(): List<String> {
+        return when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ->
+                listOf(Manifest.permission.READ_MEDIA_IMAGES)
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q ->
+                emptyList() // Scoped storage, no permission needed
+            else ->
+                listOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        }
+    }
+
+    private fun requestNotificationPermissionIfNeeded() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (!hasPermission(Manifest.permission.POST_NOTIFICATIONS)) {
+                notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+    }
+
+    private fun hasPermission(permission: String): Boolean {
+        return ContextCompat.checkSelfPermission(
+            requireContext(), permission
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun observeUiState() {

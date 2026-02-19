@@ -23,6 +23,13 @@
 
     <style name="Theme.Wallpapers" parent="Base.Theme.Wallpapers" />
 
+    <!-- Splash screen theme: no action bar, translucent status/nav bars -->
+    <style name="Theme.Wallpapers.Splash" parent="Base.Theme.Wallpapers">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
     <!-- Custom ActionBar Style -->
     <style name="Widget.Wallpapers.ActionBar" parent="Widget.AppCompat.ActionBar.Solid">
         <item name="background">@color/dark_surface</item>

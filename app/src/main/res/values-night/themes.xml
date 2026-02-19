@@ -16,4 +16,11 @@
 
         <item name="actionBarStyle">@style/Widget.Wallpapers.ActionBar</item>
     </style>
+
+    <!-- Splash screen theme: no action bar, fullscreen -->
+    <style name="Theme.Wallpapers.Splash" parent="Base.Theme.Wallpapers">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
 </resources>

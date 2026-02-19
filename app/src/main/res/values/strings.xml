@@ -13,4 +13,7 @@
     <string name="choose_wallpaper_target">Set wallpaper on</string>
     <string name="explore_wallpapers">Explore</string>
     <string name="choose_category">Choose a category to discover wallpapers</string>
+    <string name="permission_denied_storage">Storage permission is required to save wallpapers</string>
+    <string name="splash_tagline">Stunning wallpapers, one tap away</string>
+    <string name="splash_loading">Preparing your experience…</string>
 </resources>

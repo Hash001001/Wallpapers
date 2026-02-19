@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/splash_gradient_bg"
+    tools:context=".SplashActivity">
+
+    <!-- Ambient glow behind the icon -->
+    <ImageView
+        android:id="@+id/glowEffect"
+        android:layout_width="280dp"
+        android:layout_height="280dp"
+        android:layout_gravity="center"
+        android:alpha="0"
+        android:importantForAccessibility="no"
+        android:src="@drawable/splash_circle_glow" />
+
+    <!-- Central content -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <!-- Icon with gradient background -->
+        <FrameLayout
+            android:id="@+id/iconContainer"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:alpha="0"
+            android:background="@drawable/splash_icon_bg"
+            android:elevation="12dp">
+
+            <ImageView
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_gravity="center"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_splash_wallpaper" />
+        </FrameLayout>
+
+        <!-- App name -->
+        <TextView
+            android:id="@+id/appTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:alpha="0"
+            android:fontFamily="sans-serif-medium"
+            android:letterSpacing="0.12"
+            android:text="@string/app_name"
+            android:textColor="@color/white"
+            android:textSize="26sp"
+            android:textStyle="bold" />
+
+        <!-- Tagline -->
+        <TextView
+            android:id="@+id/appTagline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:alpha="0"
+            android:fontFamily="sans-serif-light"
+            android:letterSpacing="0.08"
+            android:text="@string/splash_tagline"
+            android:textColor="#B0B8C4"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <!-- Bottom loading indicator -->
+    <LinearLayout
+        android:id="@+id/loadingContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="64dp"
+        android:alpha="0"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ProgressBar
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:indeterminateTint="@color/accent_secondary"
+            style="?android:attr/progressBarStyleSmall" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:fontFamily="sans-serif-light"
+            android:text="@string/splash_loading"
+            android:textColor="#80B0B8C4"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+</FrameLayout>
