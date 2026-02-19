@@ -1,8 +1,38 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+    <!-- Base application theme - Dark immersive wallpaper experience -->
     <style name="Base.Theme.Wallpapers" parent="Theme.Material3.DayNight">
-        <!-- Customize your light theme here. -->
+        <!-- Primary brand colors -->
+        <item name="colorPrimary">@color/accent_primary</item>
+        <item name="colorOnPrimary">@color/accent_on_primary</item>
+        <item name="colorSecondary">@color/accent_secondary</item>
+
+        <!-- Background & Surface -->
+        <item name="android:colorBackground">@color/dark_background</item>
+        <item name="colorSurface">@color/dark_surface</item>
+        <item name="colorSurfaceVariant">@color/dark_surface_variant</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="colorOnSurfaceVariant">@color/text_secondary</item>
+
+        <!-- System Bars -->
+        <item name="android:statusBarColor">@color/status_bar</item>
+        <item name="android:navigationBarColor">@color/dark_background</item>
+
+        <!-- ActionBar -->
+        <item name="actionBarStyle">@style/Widget.Wallpapers.ActionBar</item>
     </style>
 
     <style name="Theme.Wallpapers" parent="Base.Theme.Wallpapers" />
+
+    <!-- Custom ActionBar Style -->
+    <style name="Widget.Wallpapers.ActionBar" parent="Widget.AppCompat.ActionBar.Solid">
+        <item name="background">@color/dark_surface</item>
+        <item name="titleTextStyle">@style/TextAppearance.Wallpapers.ActionBar.Title</item>
+        <item name="elevation">0dp</item>
+    </style>
+
+    <style name="TextAppearance.Wallpapers.ActionBar.Title" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
 </resources>

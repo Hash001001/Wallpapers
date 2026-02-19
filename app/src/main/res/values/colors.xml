@@ -2,4 +2,25 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Dark Theme Palette -->
+    <color name="dark_background">#FF0D1117</color>
+    <color name="dark_surface">#FF161B22</color>
+    <color name="dark_surface_variant">#FF1C2333</color>
+    <color name="dark_card">#FF1E2535</color>
+
+    <!-- Accent Colors -->
+    <color name="accent_primary">#FF7C4DFF</color>
+    <color name="accent_secondary">#FF00E5FF</color>
+    <color name="accent_on_primary">#FFFFFFFF</color>
+
+    <!-- Text Colors -->
+    <color name="text_primary">#FFFAFAFA</color>
+    <color name="text_secondary">#FFB0B8C4</color>
+
+    <!-- Placeholder -->
+    <color name="placeholder_dark">#FF252D3A</color>
+
+    <!-- Status/Navigation bar -->
+    <color name="status_bar">#FF080C12</color>
 </resources>

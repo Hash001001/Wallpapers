@@ -1,6 +1,19 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+    <!-- Dark theme inherits from the base (already dark) -->
     <style name="Base.Theme.Wallpapers" parent="Theme.Material3.DayNight">
-        <!-- Customize your dark theme here. -->
+        <item name="colorPrimary">@color/accent_primary</item>
+        <item name="colorOnPrimary">@color/accent_on_primary</item>
+        <item name="colorSecondary">@color/accent_secondary</item>
+
+        <item name="android:colorBackground">@color/dark_background</item>
+        <item name="colorSurface">@color/dark_surface</item>
+        <item name="colorSurfaceVariant">@color/dark_surface_variant</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="colorOnSurfaceVariant">@color/text_secondary</item>
+
+        <item name="android:statusBarColor">@color/status_bar</item>
+        <item name="android:navigationBarColor">@color/dark_background</item>
+
+        <item name="actionBarStyle">@style/Widget.Wallpapers.ActionBar</item>
     </style>
 </resources>

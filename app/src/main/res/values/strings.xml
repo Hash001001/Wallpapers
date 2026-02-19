@@ -11,4 +11,6 @@
     <string name="set_lock_screen">Lock Screen</string>
     <string name="set_both">Both</string>
     <string name="choose_wallpaper_target">Set wallpaper on</string>
+    <string name="explore_wallpapers">Explore</string>
+    <string name="choose_category">Choose a category to discover wallpapers</string>
 </resources>
