@@ -2,24 +2,20 @@ package com.securetech.wallpapers.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.securetech.wallpapers.R
 import com.securetech.wallpapers.databinding.ItemPreviewPagerBinding
 import com.securetech.wallpapers.domain.model.Wallpaper
 
-class PreviewPagerAdapter : RecyclerView.Adapter<PreviewPagerAdapter.PreviewViewHolder>() {
+class PreviewPagerAdapter : ListAdapter<Wallpaper, PreviewPagerAdapter.PreviewViewHolder>(
+    PreviewDiffCallback()
+) {
 
-    private val wallpapers = mutableListOf<Wallpaper>()
-
-    fun submitList(list: List<Wallpaper>) {
-        wallpapers.clear()
-        wallpapers.addAll(list)
-        notifyDataSetChanged()
-    }
-
-    fun getItem(position: Int): Wallpaper? {
-        return wallpapers.getOrNull(position)
+    fun getItemOrNull(position: Int): Wallpaper? {
+        return if (position in 0 until itemCount) getItem(position) else null
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PreviewViewHolder {
@@ -30,10 +26,8 @@ class PreviewPagerAdapter : RecyclerView.Adapter<PreviewPagerAdapter.PreviewView
     }
 
     override fun onBindViewHolder(holder: PreviewViewHolder, position: Int) {
-        holder.bind(wallpapers[position])
+        holder.bind(getItem(position))
     }
-
-    override fun getItemCount(): Int = wallpapers.size
 
     class PreviewViewHolder(
         private val binding: ItemPreviewPagerBinding
@@ -46,5 +40,13 @@ class PreviewPagerAdapter : RecyclerView.Adapter<PreviewPagerAdapter.PreviewView
                 error(R.drawable.placeholder_wallpaper)
             }
         }
+    }
+
+    private class PreviewDiffCallback : DiffUtil.ItemCallback<Wallpaper>() {
+        override fun areItemsTheSame(oldItem: Wallpaper, newItem: Wallpaper): Boolean =
+            oldItem.id == newItem.id
+
+        override fun areContentsTheSame(oldItem: Wallpaper, newItem: Wallpaper): Boolean =
+            oldItem == newItem
     }
 }

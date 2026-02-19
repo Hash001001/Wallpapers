@@ -112,7 +112,7 @@ class PreviewViewModel @Inject constructor(
                 val bitmap = Bitmap.createBitmap(
                     drawable.intrinsicWidth,
                     drawable.intrinsicHeight,
-                    Bitmap.Config.ARGB_8888
+                    Bitmap.Config.RGB_565
                 )
                 val canvas = android.graphics.Canvas(bitmap)
                 drawable.setBounds(0, 0, canvas.width, canvas.height)

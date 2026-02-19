@@ -63,7 +63,7 @@ class PreviewFragment : Fragment() {
 
     private fun getCurrentWallpaperUrl(): String? {
         val position = binding.viewPagerPreview.currentItem
-        return pagerAdapter.getItem(position)?.imageUrl
+        return pagerAdapter.getItemOrNull(position)?.imageUrl
     }
 
     private fun showSetWallpaperDialog(imageUrl: String) {
