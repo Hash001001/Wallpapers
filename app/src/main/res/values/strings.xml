@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Backdrop Wallpaper App</string>
+    <string name="wallpaper_preview">Wallpaper Preview</string>
+    <string name="download_wallpaper">Download Wallpaper</string>
 </resources>

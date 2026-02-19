@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_graph"
+    app:startDestination="@id/categoriesFragment">
+
+    <fragment
+        android:id="@+id/categoriesFragment"
+        android:name="com.securetech.wallpapers.ui.categories.CategoriesFragment"
+        android:label="Categories"
+        tools:layout="@layout/fragment_categories">
+        <action
+            android:id="@+id/action_categories_to_wallpaperList"
+            app:destination="@id/wallpaperListFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/wallpaperListFragment"
+        android:name="com.securetech.wallpapers.ui.wallpaperlist.WallpaperListFragment"
+        android:label="Wallpapers"
+        tools:layout="@layout/fragment_wallpaper_list">
+        <argument
+            android:name="category"
+            android:defaultValue=""
+            app:argType="string" />
+        <action
+            android:id="@+id/action_wallpaperList_to_preview"
+            app:destination="@id/previewFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/previewFragment"
+        android:name="com.securetech.wallpapers.ui.preview.PreviewFragment"
+        android:label="Preview"
+        tools:layout="@layout/fragment_preview">
+        <argument
+            android:name="wallpaperId"
+            android:defaultValue=""
+            app:argType="string" />
+    </fragment>
+
+</navigation>
