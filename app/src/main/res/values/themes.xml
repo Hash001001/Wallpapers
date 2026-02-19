@@ -3,7 +3,6 @@
     <style name="Base.Theme.Wallpapers" parent="Theme.Material3.DayNight">
         <!-- Primary brand colors -->
         <item name="colorPrimary">@color/accent_primary</item>
-        <item name="colorPrimaryVariant">@color/accent_primary_variant</item>
         <item name="colorOnPrimary">@color/accent_on_primary</item>
         <item name="colorSecondary">@color/accent_secondary</item>
 

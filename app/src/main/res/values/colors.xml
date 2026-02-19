@@ -11,7 +11,6 @@
 
     <!-- Accent Colors -->
     <color name="accent_primary">#FF7C4DFF</color>
-    <color name="accent_primary_variant">#FF651FFF</color>
     <color name="accent_secondary">#FF00E5FF</color>
     <color name="accent_on_primary">#FFFFFFFF</color>
 

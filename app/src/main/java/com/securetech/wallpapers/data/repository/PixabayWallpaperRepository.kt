@@ -51,19 +51,23 @@ class PixabayWallpaperRepository @Inject constructor(
             return@flow
         }
 
-        val response = apiService.searchImages(
-            apiKey = apiKey,
-            query = categoryDef.searchQuery
-        )
-
-        val wallpapers = response.hits.map { image ->
-            Wallpaper(
-                id = image.id.toString(),
-                imageUrl = image.largeImageUrl,
-                categoryId = categoryId
+        try {
+            val response = apiService.searchImages(
+                apiKey = apiKey,
+                query = categoryDef.searchQuery
             )
+
+            val wallpapers = response.hits.map { image ->
+                Wallpaper(
+                    id = image.id.toString(),
+                    imageUrl = image.largeImageUrl,
+                    categoryId = categoryId
+                )
+            }
+            emit(wallpapers)
+        } catch (e: Exception) {
+            throw Exception("Failed to load wallpapers: ${e.message}", e)
         }
-        emit(wallpapers)
     }
 
     private data class CategoryDefinition(
