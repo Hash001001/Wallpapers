@@ -22,11 +22,15 @@
     <fragment
         android:id="@+id/wallpaperListFragment"
         android:name="com.securetech.wallpapers.ui.wallpaperlist.WallpaperListFragment"
-        android:label="Wallpapers"
+        android:label="{categoryName}"
         tools:layout="@layout/fragment_wallpaper_list">
         <argument
-            android:name="category"
+            android:name="categoryId"
             android:defaultValue=""
+            app:argType="string" />
+        <argument
+            android:name="categoryName"
+            android:defaultValue="Wallpapers"
             app:argType="string" />
         <action
             android:id="@+id/action_wallpaperList_to_preview"
@@ -43,9 +47,13 @@
         android:label="Preview"
         tools:layout="@layout/fragment_preview">
         <argument
-            android:name="wallpaperId"
+            android:name="categoryId"
             android:defaultValue=""
             app:argType="string" />
+        <argument
+            android:name="wallpaperIndex"
+            android:defaultValue="0"
+            app:argType="integer" />
     </fragment>
 
 </navigation>

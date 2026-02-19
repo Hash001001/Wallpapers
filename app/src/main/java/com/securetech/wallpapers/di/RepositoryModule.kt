@@ -1,7 +1,7 @@
 package com.securetech.wallpapers.di
 
-import com.securetech.wallpapers.data.repository.WallpaperRepository
-import com.securetech.wallpapers.data.repository.WallpaperRepositoryImpl
+import com.securetech.wallpapers.data.repository.FakeWallpaperRepository
+import com.securetech.wallpapers.domain.repository.WallpaperRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -15,6 +15,6 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindWallpaperRepository(
-        wallpaperRepositoryImpl: WallpaperRepositoryImpl
+        fakeWallpaperRepository: FakeWallpaperRepository
     ): WallpaperRepository
 }

@@ -2,4 +2,13 @@
     <string name="app_name">Backdrop Wallpaper App</string>
     <string name="wallpaper_preview">Wallpaper Preview</string>
     <string name="download_wallpaper">Download Wallpaper</string>
+    <string name="set_wallpaper">Set Wallpaper</string>
+    <string name="category_image">Category Image</string>
+    <string name="wallpaper_image">Wallpaper Image</string>
+    <string name="retry">Retry</string>
+    <string name="no_wallpapers">No wallpapers found</string>
+    <string name="set_home_screen">Home Screen</string>
+    <string name="set_lock_screen">Lock Screen</string>
+    <string name="set_both">Both</string>
+    <string name="choose_wallpaper_target">Set wallpaper on</string>
 </resources>

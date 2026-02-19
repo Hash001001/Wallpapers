@@ -60,6 +60,9 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
     
+    // ViewPager2
+    implementation(libs.androidx.viewpager2)
+    
     // Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
@@ -78,6 +81,9 @@ dependencies {
     // Coroutines
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
+    
+    // Image Loading
+    implementation(libs.coil)
     
     // Testing
     testImplementation(libs.junit)
