@@ -26,8 +26,8 @@ class WallpaperListViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<UiState<List<Wallpaper>>>(UiState.Loading)
     val uiState: StateFlow<UiState<List<Wallpaper>>> = _uiState.asStateFlow()
 
-    private var _activeSearchQuery: String = initialSearchQuery
-    val activeSearchQuery: String get() = _activeSearchQuery
+    private var activeQuery: String = initialSearchQuery
+    val activeSearchQuery: String get() = activeQuery
 
     init {
         loadWallpapers()
@@ -52,7 +52,7 @@ class WallpaperListViewModel @Inject constructor(
 
     fun searchWallpapers(query: String) {
         val trimmed = query.trim()
-        _activeSearchQuery = trimmed
+        activeQuery = trimmed
         if (trimmed.isBlank()) {
             loadWallpapers()
             return

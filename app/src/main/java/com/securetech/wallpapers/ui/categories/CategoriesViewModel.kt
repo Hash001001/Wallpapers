@@ -65,7 +65,7 @@ class CategoriesViewModel @Inject constructor(
             filtered
         } else {
             val searchCategory = Category(
-                id = "search_$query",
+                id = "${SEARCH_CATEGORY_PREFIX}$query",
                 name = query,
                 thumbnailUrl = ""
             )
@@ -73,5 +73,9 @@ class CategoriesViewModel @Inject constructor(
         }
 
         _uiState.value = UiState.Success(result)
+    }
+
+    companion object {
+        const val SEARCH_CATEGORY_PREFIX = "search_"
     }
 }

@@ -30,7 +30,7 @@ class CategoriesFragment : Fragment() {
     private val viewModel: CategoriesViewModel by viewModels()
 
     private val categoriesAdapter = CategoriesAdapter { category ->
-        val isSearchCategory = category.id.startsWith("search_")
+        val isSearchCategory = category.id.startsWith(CategoriesViewModel.SEARCH_CATEGORY_PREFIX)
         val searchQuery = if (isSearchCategory) category.name else ""
         val action = CategoriesFragmentDirections
             .actionCategoriesToWallpaperList(
