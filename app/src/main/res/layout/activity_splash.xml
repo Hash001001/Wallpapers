@@ -65,7 +65,7 @@
             android:fontFamily="sans-serif-light"
             android:letterSpacing="0.08"
             android:text="@string/splash_tagline"
-            android:textColor="#B0B8C4"
+            android:textColor="#E0FFFFFF"
             android:textSize="14sp" />
 
     </LinearLayout>
@@ -93,7 +93,7 @@
             android:layout_marginTop="12dp"
             android:fontFamily="sans-serif-light"
             android:text="@string/splash_loading"
-            android:textColor="#80B0B8C4"
+            android:textColor="#B0FFFFFF"
             android:textSize="12sp" />
     </LinearLayout>
 

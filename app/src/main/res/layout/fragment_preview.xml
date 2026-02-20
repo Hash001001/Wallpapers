@@ -51,7 +51,7 @@
         android:contentDescription="@string/download_wallpaper"
         android:src="@android:drawable/stat_sys_download"
         app:backgroundTint="@color/accent_secondary"
-        app:tint="@color/dark_background"
+        app:tint="@color/text_primary"
         app:fabSize="normal"
         app:elevation="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
