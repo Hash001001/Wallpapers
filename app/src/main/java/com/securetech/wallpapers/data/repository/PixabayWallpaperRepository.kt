@@ -5,6 +5,7 @@ import com.securetech.wallpapers.data.remote.PixabayApiService
 import com.securetech.wallpapers.domain.model.Category
 import com.securetech.wallpapers.domain.model.Wallpaper
 import com.securetech.wallpapers.domain.repository.WallpaperRepository
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -64,6 +65,8 @@ class PixabayWallpaperRepository @Inject constructor(
                 }.awaitAll()
             }
             emit(categories)
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             throw Exception("Failed to load categories: ${e.message}", e)
         }
@@ -113,6 +116,8 @@ class PixabayWallpaperRepository @Inject constructor(
                 }.awaitAll()
             }
             emit(categories)
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             throw Exception("Failed to load categories: ${e.message}", e)
         }
@@ -144,6 +149,8 @@ class PixabayWallpaperRepository @Inject constructor(
                 )
             }
             emit(wallpapers)
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             throw Exception("Failed to load wallpapers: ${e.message}", e)
         }
@@ -177,6 +184,8 @@ class PixabayWallpaperRepository @Inject constructor(
                 )
             }
             emit(wallpapers)
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             throw Exception("Failed to load wallpapers: ${e.message}", e)
         }
@@ -203,6 +212,8 @@ class PixabayWallpaperRepository @Inject constructor(
                 )
             }
             emit(wallpapers)
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             throw Exception("Failed to search wallpapers: ${e.message}", e)
         }
@@ -230,6 +241,8 @@ class PixabayWallpaperRepository @Inject constructor(
                 )
             }
             emit(wallpapers)
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             throw Exception("Failed to search wallpapers: ${e.message}", e)
         }
