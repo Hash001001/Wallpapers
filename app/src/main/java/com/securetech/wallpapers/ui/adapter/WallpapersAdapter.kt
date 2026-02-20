@@ -11,7 +11,7 @@ import com.securetech.wallpapers.databinding.ItemWallpaperBinding
 import com.securetech.wallpapers.domain.model.Wallpaper
 
 class WallpapersAdapter(
-    private val onWallpaperClick: (Int) -> Unit
+    private val onWallpaperClick: (Wallpaper) -> Unit
 ) : ListAdapter<Wallpaper, WallpapersAdapter.WallpaperViewHolder>(WallpaperDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WallpaperViewHolder {
@@ -22,21 +22,21 @@ class WallpapersAdapter(
     }
 
     override fun onBindViewHolder(holder: WallpaperViewHolder, position: Int) {
-        holder.bind(getItem(position), position)
+        holder.bind(getItem(position))
     }
 
     inner class WallpaperViewHolder(
         private val binding: ItemWallpaperBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(wallpaper: Wallpaper, position: Int) {
+        fun bind(wallpaper: Wallpaper) {
             binding.imageViewWallpaper.load(wallpaper.imageUrl) {
                 crossfade(true)
                 placeholder(R.drawable.placeholder_wallpaper)
                 error(R.drawable.placeholder_wallpaper)
             }
             binding.root.setOnClickListener {
-                onWallpaperClick(position)
+                onWallpaperClick(wallpaper)
             }
         }
     }

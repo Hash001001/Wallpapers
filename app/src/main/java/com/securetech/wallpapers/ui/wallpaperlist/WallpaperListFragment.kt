@@ -30,11 +30,12 @@ class WallpaperListFragment : Fragment() {
     private val args: WallpaperListFragmentArgs by navArgs()
     private val viewModel: WallpaperListViewModel by viewModels()
 
-    private val wallpapersAdapter = WallpapersAdapter { position ->
+    private val wallpapersAdapter = WallpapersAdapter { wallpaper ->
         val action = WallpaperListFragmentDirections
             .actionWallpaperListToPreview(
                 categoryId = args.categoryId,
-                wallpaperIndex = position,
+                wallpaperIndex = 0,
+                wallpaperId = wallpaper.id,
                 searchQuery = viewModel.activeSearchQuery
             )
         findNavController().navigate(action)

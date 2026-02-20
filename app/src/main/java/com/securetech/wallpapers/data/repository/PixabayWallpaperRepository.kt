@@ -69,6 +69,55 @@ class PixabayWallpaperRepository @Inject constructor(
         }
     }
 
+    override fun getCategoriesPaged(page: Int, pageSize: Int): Flow<List<Category>> = flow {
+        if (apiKey.isBlank()) {
+            emit(emptyList())
+            return@flow
+        }
+
+        val fromIndex = (page - 1) * pageSize
+        if (fromIndex >= categoryDefinitions.size) {
+            emit(emptyList())
+            return@flow
+        }
+
+        val pagedDefinitions = categoryDefinitions.subList(
+            fromIndex,
+            minOf(fromIndex + pageSize, categoryDefinitions.size)
+        )
+
+        try {
+            val categories = coroutineScope {
+                pagedDefinitions.map { def ->
+                    async {
+                        try {
+                            val response = apiService.searchImages(
+                                apiKey = apiKey,
+                                query = def.searchQuery,
+                                perPage = CATEGORY_THUMBNAIL_FETCH_COUNT
+                            )
+                            val thumbnailUrl = response.hits.firstOrNull()?.webformatUrl ?: ""
+                            Category(
+                                id = def.id,
+                                name = def.name,
+                                thumbnailUrl = thumbnailUrl
+                            )
+                        } catch (e: Exception) {
+                            Category(
+                                id = def.id,
+                                name = def.name,
+                                thumbnailUrl = ""
+                            )
+                        }
+                    }
+                }.awaitAll()
+            }
+            emit(categories)
+        } catch (e: Exception) {
+            throw Exception("Failed to load categories: ${e.message}", e)
+        }
+    }
+
     override fun getWallpapersByCategory(categoryId: String): Flow<List<Wallpaper>> = flow {
         val categoryDef = categoryDefinitions.find { it.id == categoryId }
         if (categoryDef == null) {
