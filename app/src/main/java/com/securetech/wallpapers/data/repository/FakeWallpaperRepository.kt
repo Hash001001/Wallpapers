@@ -21,6 +21,21 @@ class FakeWallpaperRepository @Inject constructor() : WallpaperRepository {
         Category("8", "Cityscapes", "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=400")
     )
 
+    private val extraCategories = listOf(
+        Category("9", "Forest", "https://images.unsplash.com/photo-1448375240586-882707db888b?w=400"),
+        Category("10", "Desert", "https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=400"),
+        Category("11", "Waterfall", "https://images.unsplash.com/photo-1432405972618-c6b0cfba8673?w=400"),
+        Category("12", "Winter", "https://images.unsplash.com/photo-1457269449834-928af64c684d?w=400"),
+        Category("13", "Autumn", "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400"),
+        Category("14", "Cars", "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=400"),
+        Category("15", "Food", "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400"),
+        Category("16", "Music", "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=400")
+    )
+
+    private val allCategories: List<Category> by lazy {
+        categories + extraCategories.shuffled()
+    }
+
     private val wallpapers = listOf(
         // Nature
         Wallpaper("n1", "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1080", "1"),
@@ -76,10 +91,10 @@ class FakeWallpaperRepository @Inject constructor() : WallpaperRepository {
     override fun getCategoriesPaged(page: Int, pageSize: Int): Flow<List<Category>> = flow {
         delay(500)
         val fromIndex = (page - 1) * pageSize
-        if (fromIndex >= categories.size) {
+        if (fromIndex >= allCategories.size) {
             emit(emptyList())
         } else {
-            emit(categories.subList(fromIndex, minOf(fromIndex + pageSize, categories.size)))
+            emit(allCategories.subList(fromIndex, minOf(fromIndex + pageSize, allCategories.size)))
         }
     }
 
