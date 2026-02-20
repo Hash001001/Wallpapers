@@ -5,6 +5,9 @@ import com.securetech.wallpapers.data.remote.PixabayApiService
 import com.securetech.wallpapers.domain.model.Category
 import com.securetech.wallpapers.domain.model.Wallpaper
 import com.securetech.wallpapers.domain.repository.WallpaperRepository
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -16,27 +19,54 @@ class PixabayWallpaperRepository @Inject constructor(
     private val apiKey = BuildConfig.PIXABAY_API_KEY
 
     private val categoryDefinitions = listOf(
-        CategoryDefinition("1", "Nature", "nature landscape", "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400"),
-        CategoryDefinition("2", "Abstract", "abstract colorful", "https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=400"),
-        CategoryDefinition("3", "Architecture", "architecture building", "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=400"),
-        CategoryDefinition("4", "Space", "space galaxy stars", "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=400"),
-        CategoryDefinition("5", "Animals", "animals wildlife", "https://images.unsplash.com/photo-1474511320723-9a56873571b7?w=400"),
-        CategoryDefinition("6", "Ocean", "ocean sea beach", "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400"),
-        CategoryDefinition("7", "Mountains", "mountains peaks", "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400"),
-        CategoryDefinition("8", "Cityscapes", "city skyline night", "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=400"),
-        CategoryDefinition("9", "Flowers", "flowers bloom", "https://images.unsplash.com/photo-1490750967868-88aa4f44baee?w=400"),
-        CategoryDefinition("10", "Sunset", "sunset sunrise sky", "https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?w=400")
+        CategoryDefinition("1", "Nature", "nature landscape"),
+        CategoryDefinition("2", "Abstract", "abstract colorful"),
+        CategoryDefinition("3", "Architecture", "architecture building"),
+        CategoryDefinition("4", "Space", "space galaxy stars"),
+        CategoryDefinition("5", "Animals", "animals wildlife"),
+        CategoryDefinition("6", "Ocean", "ocean sea beach"),
+        CategoryDefinition("7", "Mountains", "mountains peaks"),
+        CategoryDefinition("8", "Cityscapes", "city skyline night"),
+        CategoryDefinition("9", "Flowers", "flowers bloom"),
+        CategoryDefinition("10", "Sunset", "sunset sunrise sky")
     )
 
     override fun getCategories(): Flow<List<Category>> = flow {
-        val categories = categoryDefinitions.map { def ->
-            Category(
-                id = def.id,
-                name = def.name,
-                thumbnailUrl = def.thumbnailUrl
-            )
+        if (apiKey.isBlank()) {
+            emit(emptyList())
+            return@flow
         }
-        emit(categories)
+
+        try {
+            val categories = coroutineScope {
+                categoryDefinitions.map { def ->
+                    async {
+                        try {
+                            val response = apiService.searchImages(
+                                apiKey = apiKey,
+                                query = def.searchQuery,
+                                perPage = CATEGORY_THUMBNAIL_FETCH_COUNT
+                            )
+                            val thumbnailUrl = response.hits.firstOrNull()?.webformatUrl ?: ""
+                            Category(
+                                id = def.id,
+                                name = def.name,
+                                thumbnailUrl = thumbnailUrl
+                            )
+                        } catch (e: Exception) {
+                            Category(
+                                id = def.id,
+                                name = def.name,
+                                thumbnailUrl = ""
+                            )
+                        }
+                    }
+                }.awaitAll()
+            }
+            emit(categories)
+        } catch (e: Exception) {
+            throw Exception("Failed to load categories: ${e.message}", e)
+        }
     }
 
     override fun getWallpapersByCategory(categoryId: String): Flow<List<Wallpaper>> = flow {
@@ -70,10 +100,39 @@ class PixabayWallpaperRepository @Inject constructor(
         }
     }
 
+    override fun searchWallpapers(query: String): Flow<List<Wallpaper>> = flow {
+        if (apiKey.isBlank() || query.isBlank()) {
+            emit(emptyList())
+            return@flow
+        }
+
+        try {
+            val response = apiService.searchImages(
+                apiKey = apiKey,
+                query = query,
+                perPage = 20
+            )
+
+            val wallpapers = response.hits.map { image ->
+                Wallpaper(
+                    id = image.id.toString(),
+                    imageUrl = image.largeImageUrl,
+                    categoryId = ""
+                )
+            }
+            emit(wallpapers)
+        } catch (e: Exception) {
+            throw Exception("Failed to search wallpapers: ${e.message}", e)
+        }
+    }
+
     private data class CategoryDefinition(
         val id: String,
         val name: String,
-        val searchQuery: String,
-        val thumbnailUrl: String
+        val searchQuery: String
     )
+
+    companion object {
+        private const val CATEGORY_THUMBNAIL_FETCH_COUNT = 3
+    }
 }

@@ -7,4 +7,5 @@ import kotlinx.coroutines.flow.Flow
 interface WallpaperRepository {
     fun getCategories(): Flow<List<Category>>
     fun getWallpapersByCategory(categoryId: String): Flow<List<Wallpaper>>
+    fun searchWallpapers(query: String): Flow<List<Wallpaper>>
 }

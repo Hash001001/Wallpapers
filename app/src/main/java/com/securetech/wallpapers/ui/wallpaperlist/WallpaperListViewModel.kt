@@ -21,9 +21,13 @@ class WallpaperListViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val categoryId: String = savedStateHandle["categoryId"] ?: ""
+    private val initialSearchQuery: String = savedStateHandle["searchQuery"] ?: ""
 
     private val _uiState = MutableStateFlow<UiState<List<Wallpaper>>>(UiState.Loading)
     val uiState: StateFlow<UiState<List<Wallpaper>>> = _uiState.asStateFlow()
+
+    private var activeQuery: String = initialSearchQuery
+    val activeSearchQuery: String get() = activeQuery
 
     init {
         loadWallpapers()
@@ -32,9 +36,32 @@ class WallpaperListViewModel @Inject constructor(
     fun loadWallpapers() {
         viewModelScope.launch {
             _uiState.value = UiState.Loading
-            wallpaperRepository.getWallpapersByCategory(categoryId)
-                .catch { e ->
+            val flow = if (initialSearchQuery.isNotBlank()) {
+                wallpaperRepository.searchWallpapers(initialSearchQuery)
+            } else {
+                wallpaperRepository.getWallpapersByCategory(categoryId)
+            }
+            flow.catch { e ->
                     _uiState.value = UiState.Error(e.message ?: "Failed to load wallpapers")
+                }
+                .collect { wallpapers ->
+                    _uiState.value = UiState.Success(wallpapers)
+                }
+        }
+    }
+
+    fun searchWallpapers(query: String) {
+        val trimmed = query.trim()
+        activeQuery = trimmed
+        if (trimmed.isBlank()) {
+            loadWallpapers()
+            return
+        }
+        viewModelScope.launch {
+            _uiState.value = UiState.Loading
+            wallpaperRepository.searchWallpapers(trimmed)
+                .catch { e ->
+                    _uiState.value = UiState.Error(e.message ?: "Failed to search wallpapers")
                 }
                 .collect { wallpapers ->
                     _uiState.value = UiState.Success(wallpapers)

@@ -39,6 +39,7 @@ class PreviewViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val categoryId: String = savedStateHandle["categoryId"] ?: ""
+    private val searchQuery: String = savedStateHandle["searchQuery"] ?: ""
     val initialIndex: Int = savedStateHandle["wallpaperIndex"] ?: 0
 
     private val _uiState = MutableStateFlow<UiState<List<Wallpaper>>>(UiState.Loading)
@@ -54,8 +55,12 @@ class PreviewViewModel @Inject constructor(
     private fun loadWallpapers() {
         viewModelScope.launch {
             _uiState.value = UiState.Loading
-            wallpaperRepository.getWallpapersByCategory(categoryId)
-                .catch { e ->
+            val flow = if (searchQuery.isNotBlank()) {
+                wallpaperRepository.searchWallpapers(searchQuery)
+            } else {
+                wallpaperRepository.getWallpapersByCategory(categoryId)
+            }
+            flow.catch { e ->
                     _uiState.value = UiState.Error(e.message ?: "Failed to load wallpapers")
                 }
                 .collect { wallpapers ->

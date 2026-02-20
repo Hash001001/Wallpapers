@@ -1,6 +1,8 @@
 package com.securetech.wallpapers.ui.categories
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,10 +30,13 @@ class CategoriesFragment : Fragment() {
     private val viewModel: CategoriesViewModel by viewModels()
 
     private val categoriesAdapter = CategoriesAdapter { category ->
+        val isSearchCategory = category.id.startsWith(CategoriesViewModel.SEARCH_CATEGORY_PREFIX)
+        val searchQuery = if (isSearchCategory) category.name else ""
         val action = CategoriesFragmentDirections
             .actionCategoriesToWallpaperList(
-                categoryId = category.id,
-                categoryName = category.name
+                categoryId = if (isSearchCategory) "" else category.id,
+                categoryName = category.name,
+                searchQuery = searchQuery
             )
         findNavController().navigate(action)
     }
@@ -48,6 +53,7 @@ class CategoriesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
+        setupSearchBar()
         setupRetryButton()
         observeUiState()
     }
@@ -57,6 +63,16 @@ class CategoriesFragment : Fragment() {
             layoutManager = GridLayoutManager(requireContext(), 1)
             adapter = categoriesAdapter
         }
+    }
+
+    private fun setupSearchBar() {
+        binding.editTextSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                viewModel.onSearchQueryChanged(s?.toString() ?: "")
+            }
+        })
     }
 
     private fun setupRetryButton() {

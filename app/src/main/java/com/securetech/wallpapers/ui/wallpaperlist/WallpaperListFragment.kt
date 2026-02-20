@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -32,7 +33,8 @@ class WallpaperListFragment : Fragment() {
         val action = WallpaperListFragmentDirections
             .actionWallpaperListToPreview(
                 categoryId = args.categoryId,
-                wallpaperIndex = position
+                wallpaperIndex = position,
+                searchQuery = viewModel.activeSearchQuery
             )
         findNavController().navigate(action)
     }
@@ -49,6 +51,7 @@ class WallpaperListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
+        setupSearchBar()
         setupRetryButton()
         observeUiState()
     }
@@ -57,6 +60,17 @@ class WallpaperListFragment : Fragment() {
         binding.recyclerViewWallpapers.apply {
             layoutManager = GridLayoutManager(requireContext(), 2)
             adapter = wallpapersAdapter
+        }
+    }
+
+    private fun setupSearchBar() {
+        binding.editTextSearch.setOnEditorActionListener { v, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                viewModel.searchWallpapers(v.text.toString())
+                true
+            } else {
+                false
+            }
         }
     }
 

@@ -32,6 +32,10 @@
             android:name="categoryName"
             android:defaultValue="Wallpapers"
             app:argType="string" />
+        <argument
+            android:name="searchQuery"
+            android:defaultValue=""
+            app:argType="string" />
         <action
             android:id="@+id/action_wallpaperList_to_preview"
             app:destination="@id/previewFragment"
@@ -54,6 +58,10 @@
             android:name="wallpaperIndex"
             android:defaultValue="0"
             app:argType="integer" />
+        <argument
+            android:name="searchQuery"
+            android:defaultValue=""
+            app:argType="string" />
     </fragment>
 
 </navigation>
