@@ -19,4 +19,33 @@
     <string name="search_categories_hint">Search categories or keywords…</string>
     <string name="search_wallpapers_hint">Search wallpapers…</string>
     <string name="search_for">Search for \"%s\"</string>
+
+    <!-- About Screen -->
+    <string name="about">About</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="about_title">About Backdrop Wallpaper App</string>
+    <string name="about_version">Version %s</string>
+    <string name="about_description">Backdrop Wallpaper App lets you discover and set stunning wallpapers on your device. Browse through a wide variety of categories or search for exactly what you are looking for.</string>
+    <string name="about_pixabay_attribution">This app uses the Pixabay API. All images are provided by Pixabay contributors under the Pixabay License.</string>
+    <string name="about_pixabay_license_info">Images are free to use for commercial and non-commercial purposes. No attribution is required but always appreciated. For more details, visit the Pixabay License page.</string>
+    <string name="visit_pixabay">Visit Pixabay</string>
+    <string name="pixabay_url">https://pixabay.com</string>
+    <string name="pixabay_license_url">https://pixabay.com/service/license-summary/</string>
+
+    <!-- Privacy Policy Screen -->
+    <string name="privacy_policy_title">Privacy Policy</string>
+    <string name="privacy_policy_effective_date">Effective Date: January 1, 2025</string>
+    <string name="privacy_policy_intro">This Privacy Policy describes how Backdrop Wallpaper App ("we", "our", or "the app") handles your information when you use our application.</string>
+    <string name="privacy_policy_section_collection_title">Information Collection</string>
+    <string name="privacy_policy_section_collection_body">We do not collect, store, or share any personal information. The app does not require you to create an account or provide any personal data.</string>
+    <string name="privacy_policy_section_api_title">Third-Party Services</string>
+    <string name="privacy_policy_section_api_body">This app uses the Pixabay API to fetch wallpaper images. All images are provided by Pixabay contributors under the Pixabay License. When you use the app, image requests are sent to Pixabay\'s servers. Please refer to Pixabay\'s privacy policy for details on how they handle data: https://pixabay.com/service/privacy/</string>
+    <string name="privacy_policy_section_permissions_title">Permissions</string>
+    <string name="privacy_policy_section_permissions_body">The app requires the following permissions:\n\n• Internet Access: To fetch wallpaper images from the Pixabay API.\n• Storage Access: To save wallpapers to your device.\n• Set Wallpaper: To apply wallpapers to your home screen and lock screen.</string>
+    <string name="privacy_policy_section_data_title">Data Storage</string>
+    <string name="privacy_policy_section_data_body">All wallpaper data is cached locally on your device for performance. No data is transmitted to external servers other than the Pixabay API for fetching images.</string>
+    <string name="privacy_policy_section_changes_title">Changes to This Policy</string>
+    <string name="privacy_policy_section_changes_body">We may update this Privacy Policy from time to time. Any changes will be reflected in the app with an updated effective date.</string>
+    <string name="privacy_policy_section_contact_title">Contact Us</string>
+    <string name="privacy_policy_section_contact_body">If you have any questions about this Privacy Policy, please contact us through the app store listing.</string>
 </resources>
