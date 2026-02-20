@@ -73,13 +73,45 @@ class FakeWallpaperRepository @Inject constructor() : WallpaperRepository {
         emit(categories)
     }
 
+    override fun getCategoriesPaged(page: Int, pageSize: Int): Flow<List<Category>> = flow {
+        delay(500)
+        val fromIndex = (page - 1) * pageSize
+        if (fromIndex >= categories.size) {
+            emit(emptyList())
+        } else {
+            emit(categories.subList(fromIndex, minOf(fromIndex + pageSize, categories.size)))
+        }
+    }
+
     override fun getWallpapersByCategory(categoryId: String): Flow<List<Wallpaper>> = flow {
         delay(300)
         emit(wallpapers.filter { it.categoryId == categoryId })
     }
 
+    override fun getWallpapersByCategoryPaged(categoryId: String, page: Int, pageSize: Int): Flow<List<Wallpaper>> = flow {
+        delay(300)
+        val filtered = wallpapers.filter { it.categoryId == categoryId }
+        val fromIndex = (page - 1) * pageSize
+        if (fromIndex >= filtered.size) {
+            emit(emptyList())
+        } else {
+            emit(filtered.subList(fromIndex, minOf(fromIndex + pageSize, filtered.size)))
+        }
+    }
+
     override fun searchWallpapers(query: String): Flow<List<Wallpaper>> = flow {
         delay(300)
         emit(wallpapers.filter { it.categoryId.isNotEmpty() })
+    }
+
+    override fun searchWallpapersPaged(query: String, page: Int, pageSize: Int): Flow<List<Wallpaper>> = flow {
+        delay(300)
+        val filtered = wallpapers.filter { it.categoryId.isNotEmpty() }
+        val fromIndex = (page - 1) * pageSize
+        if (fromIndex >= filtered.size) {
+            emit(emptyList())
+        } else {
+            emit(filtered.subList(fromIndex, minOf(fromIndex + pageSize, filtered.size)))
+        }
     }
 }

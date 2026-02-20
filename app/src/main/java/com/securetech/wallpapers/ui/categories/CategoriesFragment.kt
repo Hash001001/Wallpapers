@@ -14,7 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.securetech.wallpapers.R
+import androidx.recyclerview.widget.RecyclerView
 import com.securetech.wallpapers.databinding.FragmentCategoriesBinding
 import com.securetech.wallpapers.ui.UiState
 import com.securetech.wallpapers.ui.adapter.CategoriesAdapter
@@ -62,6 +62,17 @@ class CategoriesFragment : Fragment() {
         binding.recyclerViewCategories.apply {
             layoutManager = GridLayoutManager(requireContext(), 1)
             adapter = categoriesAdapter
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    val layoutManager = recyclerView.layoutManager as GridLayoutManager
+                    val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
+                    val totalItemCount = layoutManager.itemCount
+                    if (lastVisibleItem >= totalItemCount - LOAD_MORE_THRESHOLD) {
+                        viewModel.loadMoreCategories()
+                    }
+                }
+            })
         }
     }
 
@@ -84,15 +95,22 @@ class CategoriesFragment : Fragment() {
     private fun observeUiState() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect { state ->
-                    binding.progressBar.isVisible = state is UiState.Loading
-                    binding.recyclerViewCategories.isVisible = state is UiState.Success
-                    binding.layoutError.isVisible = state is UiState.Error
+                launch {
+                    viewModel.uiState.collect { state ->
+                        binding.progressBar.isVisible = state is UiState.Loading
+                        binding.recyclerViewCategories.isVisible = state is UiState.Success
+                        binding.layoutError.isVisible = state is UiState.Error
 
-                    when (state) {
-                        is UiState.Success -> categoriesAdapter.submitList(state.data)
-                        is UiState.Error -> binding.textViewError.text = state.message
-                        is UiState.Loading -> { /* handled by visibility */ }
+                        when (state) {
+                            is UiState.Success -> categoriesAdapter.submitList(state.data)
+                            is UiState.Error -> binding.textViewError.text = state.message
+                            is UiState.Loading -> { /* handled by visibility */ }
+                        }
+                    }
+                }
+                launch {
+                    viewModel.isLoadingMore.collect { isLoading ->
+                        binding.progressBarLoadMore.isVisible = isLoading
                     }
                 }
             }
@@ -102,5 +120,9 @@ class CategoriesFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        private const val LOAD_MORE_THRESHOLD = 2
     }
 }
