@@ -32,6 +32,7 @@ class PreviewFragment : Fragment() {
 
     private val viewModel: PreviewViewModel by viewModels()
     private val pagerAdapter = PreviewPagerAdapter()
+    private var hasSetInitialPage = false
 
     private var pendingAction: (() -> Unit)? = null
 
@@ -159,9 +160,12 @@ class PreviewFragment : Fragment() {
                     when (state) {
                         is UiState.Success -> {
                             pagerAdapter.submitList(state.data)
-                            binding.viewPagerPreview.setCurrentItem(
-                                viewModel.initialIndex, false
-                            )
+                            if (!hasSetInitialPage) {
+                                binding.viewPagerPreview.setCurrentItem(
+                                    viewModel.initialIndex, false
+                                )
+                                hasSetInitialPage = true
+                            }
                         }
                         is UiState.Error -> {
                             Snackbar.make(binding.root, state.message, Snackbar.LENGTH_LONG).show()
