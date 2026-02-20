@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.IOException
@@ -58,24 +58,43 @@ class PreviewViewModel @Inject constructor(
     private fun loadWallpapers() {
         viewModelScope.launch {
             _uiState.value = UiState.Loading
-            val flow = if (searchQuery.isNotBlank()) {
-                wallpaperRepository.searchWallpapers(searchQuery)
-            } else {
-                wallpaperRepository.getWallpapersByCategory(categoryId)
-            }
-            flow.catch { e ->
-                    _uiState.value = UiState.Error(e.message ?: "Failed to load wallpapers")
-                }
-                .collect { wallpapers ->
-                    if (wallpaperId.isNotBlank()) {
-                        val matchIndex = wallpapers.indexOfFirst { it.id == wallpaperId }
+            try {
+                var page = 1
+                val allWallpapers = mutableListOf<Wallpaper>()
+                var hasMore = true
+                var found = false
+
+                while (hasMore) {
+                    val pageWallpapers = if (searchQuery.isNotBlank()) {
+                        wallpaperRepository.searchWallpapersPaged(searchQuery, page, PAGE_SIZE)
+                    } else {
+                        wallpaperRepository.getWallpapersByCategoryPaged(categoryId, page, PAGE_SIZE)
+                    }.first()
+
+                    allWallpapers.addAll(pageWallpapers)
+                    hasMore = pageWallpapers.size >= PAGE_SIZE
+
+                    if (!found && wallpaperId.isNotBlank()) {
+                        val matchIndex = allWallpapers.indexOfFirst { it.id == wallpaperId }
                         if (matchIndex >= 0) {
                             initialIndex = matchIndex
+                            found = true
                         }
                     }
-                    _uiState.value = UiState.Success(wallpapers)
+
+                    if (found) break
+                    page++
                 }
+
+                _uiState.value = UiState.Success(allWallpapers)
+            } catch (e: Exception) {
+                _uiState.value = UiState.Error(e.message ?: "Failed to load wallpapers")
+            }
         }
+    }
+
+    companion object {
+        private const val PAGE_SIZE = 10
     }
 
     fun downloadWallpaper(imageUrl: String) {
