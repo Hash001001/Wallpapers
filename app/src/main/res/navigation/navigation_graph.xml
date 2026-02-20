@@ -17,6 +17,20 @@
             app:exitAnim="@android:anim/slide_out_right"
             app:popEnterAnim="@android:anim/slide_in_left"
             app:popExitAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/action_categories_to_about"
+            app:destination="@id/aboutFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/action_categories_to_privacyPolicy"
+            app:destination="@id/privacyPolicyFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -67,5 +81,25 @@
             android:defaultValue=""
             app:argType="string" />
     </fragment>
+
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.securetech.wallpapers.ui.about.AboutFragment"
+        android:label="@string/about"
+        tools:layout="@layout/fragment_about">
+        <action
+            android:id="@+id/action_about_to_privacyPolicy"
+            app:destination="@id/privacyPolicyFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/privacyPolicyFragment"
+        android:name="com.securetech.wallpapers.ui.privacypolicy.PrivacyPolicyFragment"
+        android:label="@string/privacy_policy"
+        tools:layout="@layout/fragment_privacy_policy" />
 
 </navigation>
