@@ -14,6 +14,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.securetech.wallpapers.databinding.FragmentWallpaperListBinding
 import com.securetech.wallpapers.ui.UiState
 import com.securetech.wallpapers.ui.adapter.WallpapersAdapter
@@ -60,6 +61,17 @@ class WallpaperListFragment : Fragment() {
         binding.recyclerViewWallpapers.apply {
             layoutManager = GridLayoutManager(requireContext(), 2)
             adapter = wallpapersAdapter
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    val layoutManager = recyclerView.layoutManager as GridLayoutManager
+                    val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
+                    val totalItemCount = layoutManager.itemCount
+                    if (lastVisibleItem >= totalItemCount - LOAD_MORE_THRESHOLD) {
+                        viewModel.loadMoreWallpapers()
+                    }
+                }
+            })
         }
     }
 
@@ -83,16 +95,23 @@ class WallpaperListFragment : Fragment() {
     private fun observeUiState() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect { state ->
-                    binding.progressBar.isVisible = state is UiState.Loading
-                    binding.recyclerViewWallpapers.isVisible = state is UiState.Success
-                    binding.layoutError.isVisible = state is UiState.Error
-                    binding.textViewEmpty.isVisible = state is UiState.Success && state.data.isEmpty()
+                launch {
+                    viewModel.uiState.collect { state ->
+                        binding.progressBar.isVisible = state is UiState.Loading
+                        binding.recyclerViewWallpapers.isVisible = state is UiState.Success
+                        binding.layoutError.isVisible = state is UiState.Error
+                        binding.textViewEmpty.isVisible = state is UiState.Success && state.data.isEmpty()
 
-                    when (state) {
-                        is UiState.Success -> wallpapersAdapter.submitList(state.data)
-                        is UiState.Error -> binding.textViewError.text = state.message
-                        is UiState.Loading -> { /* handled by visibility */ }
+                        when (state) {
+                            is UiState.Success -> wallpapersAdapter.submitList(state.data)
+                            is UiState.Error -> binding.textViewError.text = state.message
+                            is UiState.Loading -> { /* handled by visibility */ }
+                        }
+                    }
+                }
+                launch {
+                    viewModel.isLoadingMore.collect { isLoading ->
+                        binding.progressBarLoadMore.isVisible = isLoading
                     }
                 }
             }
@@ -102,5 +121,9 @@ class WallpaperListFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        private const val LOAD_MORE_THRESHOLD = 4
     }
 }

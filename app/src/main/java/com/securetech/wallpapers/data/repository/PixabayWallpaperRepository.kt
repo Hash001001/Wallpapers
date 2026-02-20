@@ -100,6 +100,39 @@ class PixabayWallpaperRepository @Inject constructor(
         }
     }
 
+    override fun getWallpapersByCategoryPaged(categoryId: String, page: Int, pageSize: Int): Flow<List<Wallpaper>> = flow {
+        val categoryDef = categoryDefinitions.find { it.id == categoryId }
+        if (categoryDef == null) {
+            emit(emptyList())
+            return@flow
+        }
+
+        if (apiKey.isBlank()) {
+            emit(emptyList())
+            return@flow
+        }
+
+        try {
+            val response = apiService.searchImages(
+                apiKey = apiKey,
+                query = categoryDef.searchQuery,
+                perPage = pageSize,
+                page = page
+            )
+
+            val wallpapers = response.hits.map { image ->
+                Wallpaper(
+                    id = image.id.toString(),
+                    imageUrl = image.largeImageUrl,
+                    categoryId = categoryId
+                )
+            }
+            emit(wallpapers)
+        } catch (e: Exception) {
+            throw Exception("Failed to load wallpapers: ${e.message}", e)
+        }
+    }
+
     override fun searchWallpapers(query: String): Flow<List<Wallpaper>> = flow {
         if (apiKey.isBlank() || query.isBlank()) {
             emit(emptyList())
@@ -111,6 +144,33 @@ class PixabayWallpaperRepository @Inject constructor(
                 apiKey = apiKey,
                 query = query,
                 perPage = 20
+            )
+
+            val wallpapers = response.hits.map { image ->
+                Wallpaper(
+                    id = image.id.toString(),
+                    imageUrl = image.largeImageUrl,
+                    categoryId = ""
+                )
+            }
+            emit(wallpapers)
+        } catch (e: Exception) {
+            throw Exception("Failed to search wallpapers: ${e.message}", e)
+        }
+    }
+
+    override fun searchWallpapersPaged(query: String, page: Int, pageSize: Int): Flow<List<Wallpaper>> = flow {
+        if (apiKey.isBlank() || query.isBlank()) {
+            emit(emptyList())
+            return@flow
+        }
+
+        try {
+            val response = apiService.searchImages(
+                apiKey = apiKey,
+                query = query,
+                perPage = pageSize,
+                page = page
             )
 
             val wallpapers = response.hits.map { image ->

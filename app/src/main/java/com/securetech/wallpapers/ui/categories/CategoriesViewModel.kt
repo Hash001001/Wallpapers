@@ -21,22 +21,51 @@ class CategoriesViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<UiState<List<Category>>>(UiState.Loading)
     val uiState: StateFlow<UiState<List<Category>>> = _uiState.asStateFlow()
 
+    private val _isLoadingMore = MutableStateFlow(false)
+    val isLoadingMore: StateFlow<Boolean> = _isLoadingMore.asStateFlow()
+
     private var allCategories: List<Category> = emptyList()
     private var currentQuery: String = ""
+    private var currentPage = 1
+    private var hasMorePages = true
 
     init {
         loadCategories()
     }
 
     fun loadCategories() {
+        currentPage = 1
+        hasMorePages = true
+        allCategories = emptyList()
         viewModelScope.launch {
             _uiState.value = UiState.Loading
-            wallpaperRepository.getCategories()
+            wallpaperRepository.getCategoriesPaged(currentPage, PAGE_SIZE)
                 .catch { e ->
                     _uiState.value = UiState.Error(e.message ?: "Failed to load categories")
                 }
                 .collect { categories ->
+                    hasMorePages = categories.size >= PAGE_SIZE
                     allCategories = categories
+                    applyFilter(currentQuery)
+                }
+        }
+    }
+
+    fun loadMoreCategories() {
+        if (_isLoadingMore.value || !hasMorePages) return
+        viewModelScope.launch {
+            _isLoadingMore.value = true
+            wallpaperRepository.getCategoriesPaged(currentPage + 1, PAGE_SIZE)
+                .catch { _ ->
+                    _isLoadingMore.value = false
+                }
+                .collect { newCategories ->
+                    hasMorePages = newCategories.size >= PAGE_SIZE
+                    if (newCategories.isNotEmpty()) {
+                        currentPage++
+                        allCategories = allCategories + newCategories
+                    }
+                    _isLoadingMore.value = false
                     applyFilter(currentQuery)
                 }
         }
@@ -77,5 +106,6 @@ class CategoriesViewModel @Inject constructor(
 
     companion object {
         const val SEARCH_CATEGORY_PREFIX = "search_"
+        private const val PAGE_SIZE = 4
     }
 }
