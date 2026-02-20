@@ -32,6 +32,33 @@ class PixabayWallpaperRepository @Inject constructor(
         CategoryDefinition("10", "Sunset", "sunset sunrise sky")
     )
 
+    private val extraCategoryPool = listOf(
+        CategoryDefinition("11", "Forest", "forest trees green"),
+        CategoryDefinition("12", "Desert", "desert sand dunes"),
+        CategoryDefinition("13", "Waterfall", "waterfall cascade"),
+        CategoryDefinition("14", "Winter", "winter snow ice"),
+        CategoryDefinition("15", "Autumn", "autumn fall leaves"),
+        CategoryDefinition("16", "Cars", "cars luxury sports"),
+        CategoryDefinition("17", "Food", "food gourmet delicious"),
+        CategoryDefinition("18", "Music", "music instruments concert"),
+        CategoryDefinition("19", "Travel", "travel landmarks adventure"),
+        CategoryDefinition("20", "Technology", "technology gadgets futuristic"),
+        CategoryDefinition("21", "Sports", "sports action athletic"),
+        CategoryDefinition("22", "Night Sky", "night sky milky way"),
+        CategoryDefinition("23", "Underwater", "underwater coral reef"),
+        CategoryDefinition("24", "Vintage", "vintage retro classic"),
+        CategoryDefinition("25", "Minimalist", "minimalist simple clean"),
+        CategoryDefinition("26", "Rain", "rain drops storm"),
+        CategoryDefinition("27", "Birds", "birds flying colorful"),
+        CategoryDefinition("28", "Bridges", "bridges iconic structure"),
+        CategoryDefinition("29", "Countryside", "countryside rural farm"),
+        CategoryDefinition("30", "Volcano", "volcano lava eruption")
+    )
+
+    private val allCategoryDefinitions: List<CategoryDefinition> by lazy {
+        categoryDefinitions + extraCategoryPool.shuffled()
+    }
+
     override fun getCategories(): Flow<List<Category>> = flow {
         if (apiKey.isBlank()) {
             emit(emptyList())
@@ -79,14 +106,14 @@ class PixabayWallpaperRepository @Inject constructor(
         }
 
         val fromIndex = (page - 1) * pageSize
-        if (fromIndex >= categoryDefinitions.size) {
+        if (fromIndex >= allCategoryDefinitions.size) {
             emit(emptyList())
             return@flow
         }
 
-        val pagedDefinitions = categoryDefinitions.subList(
+        val pagedDefinitions = allCategoryDefinitions.subList(
             fromIndex,
-            minOf(fromIndex + pageSize, categoryDefinitions.size)
+            minOf(fromIndex + pageSize, allCategoryDefinitions.size)
         )
 
         try {
@@ -124,7 +151,7 @@ class PixabayWallpaperRepository @Inject constructor(
     }
 
     override fun getWallpapersByCategory(categoryId: String): Flow<List<Wallpaper>> = flow {
-        val categoryDef = categoryDefinitions.find { it.id == categoryId }
+        val categoryDef = allCategoryDefinitions.find { it.id == categoryId }
         if (categoryDef == null) {
             emit(emptyList())
             return@flow
@@ -157,7 +184,7 @@ class PixabayWallpaperRepository @Inject constructor(
     }
 
     override fun getWallpapersByCategoryPaged(categoryId: String, page: Int, pageSize: Int): Flow<List<Wallpaper>> = flow {
-        val categoryDef = categoryDefinitions.find { it.id == categoryId }
+        val categoryDef = allCategoryDefinitions.find { it.id == categoryId }
         if (categoryDef == null) {
             emit(emptyList())
             return@flow
