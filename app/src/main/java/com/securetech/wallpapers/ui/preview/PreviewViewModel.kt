@@ -40,7 +40,10 @@ class PreviewViewModel @Inject constructor(
 
     private val categoryId: String = savedStateHandle["categoryId"] ?: ""
     private val searchQuery: String = savedStateHandle["searchQuery"] ?: ""
-    val initialIndex: Int = savedStateHandle["wallpaperIndex"] ?: 0
+    private val wallpaperId: String = savedStateHandle["wallpaperId"] ?: ""
+    private val fallbackIndex: Int = savedStateHandle["wallpaperIndex"] ?: 0
+    var initialIndex: Int = fallbackIndex
+        private set
 
     private val _uiState = MutableStateFlow<UiState<List<Wallpaper>>>(UiState.Loading)
     val uiState: StateFlow<UiState<List<Wallpaper>>> = _uiState.asStateFlow()
@@ -64,6 +67,12 @@ class PreviewViewModel @Inject constructor(
                     _uiState.value = UiState.Error(e.message ?: "Failed to load wallpapers")
                 }
                 .collect { wallpapers ->
+                    if (wallpaperId.isNotBlank()) {
+                        val matchIndex = wallpapers.indexOfFirst { it.id == wallpaperId }
+                        if (matchIndex >= 0) {
+                            initialIndex = matchIndex
+                        }
+                    }
                     _uiState.value = UiState.Success(wallpapers)
                 }
         }
