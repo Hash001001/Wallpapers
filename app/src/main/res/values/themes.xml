@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme - Dark immersive wallpaper experience -->
+    <!-- Base application theme - Bright vibrant wallpaper experience -->
     <style name="Base.Theme.Wallpapers" parent="Theme.Material3.DayNight">
         <!-- Primary brand colors -->
         <item name="colorPrimary">@color/accent_primary</item>
@@ -16,6 +16,8 @@
         <!-- System Bars -->
         <item name="android:statusBarColor">@color/status_bar</item>
         <item name="android:navigationBarColor">@color/dark_background</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
 
         <!-- ActionBar -->
         <item name="actionBarStyle">@style/Widget.Wallpapers.ActionBar</item>
@@ -34,7 +36,7 @@
     <style name="Widget.Wallpapers.ActionBar" parent="Widget.AppCompat.ActionBar.Solid">
         <item name="background">@color/dark_surface</item>
         <item name="titleTextStyle">@style/TextAppearance.Wallpapers.ActionBar.Title</item>
-        <item name="elevation">0dp</item>
+        <item name="elevation">2dp</item>
     </style>
 
     <style name="TextAppearance.Wallpapers.ActionBar.Title" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
